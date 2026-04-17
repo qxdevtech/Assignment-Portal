@@ -1,0 +1,6 @@
+{
+  "name": "Student Assignment Portal",
+  "description": "A web application for students to upload assignments and admins to manage them, powered by Supabase.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

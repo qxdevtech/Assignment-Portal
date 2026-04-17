@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - Student Assignment Portal</title>
+    <link href="/src/index.css" rel="stylesheet">
+  </head>
+  <body class="flex h-screen overflow-hidden bg-[#f8fafc] text-[#1e293b] font-sans">
+    <!-- Sidebar -->
+    <nav class="w-60 bg-[#1e293b] text-white flex flex-col shrink-0">
+      <div class="p-6 text-xl font-bold tracking-tight flex items-center gap-2.5 border-b border-white/10">
+        <div class="bg-blue-500 w-6 h-6 rounded"></div>
+        EduGate
+      </div>
+      <ul class="py-4 list-none">
+        <li class="px-6 py-3 text-sm text-slate-300 cursor-pointer flex items-center gap-3 bg-[#334155] border-r-4 border-blue-500 text-white">
+          <span class="opacity-70">📊</span> Dashboard
+        </li>
+      </ul>
+      <div class="mt-auto p-6 border-t border-white/10 text-xs text-slate-400 flex justify-between items-center">
+        <div>Role: <span id="user-role-display"></span></div>
+        <button id="logout-btn" class="text-sm text-red-400 hover:text-red-300 cursor-pointer">Logout</button>
+      </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="flex-grow flex flex-col">
+      <header class="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between">
+        <div class="flex items-center">
+          <h1 class="text-xl font-bold text-gray-900">Assignment Portal</h1>
+        </div>
+        <div class="flex items-center gap-3">
+          <span id="user-name" class="text-sm font-medium"></span>
+          <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center text-xs text-white font-semibold">U</div>
+        </div>
+      </header>
+
+      <main class="p-8 h-[calc(100vh-64px)] overflow-y-auto">
+        <div id="loading" class="text-center py-10">Loading...</div>
+        
+        <!-- Student Dashboard -->
+        <div id="student-dashboard" class="hidden space-y-8">
+          <h1 class="text-2xl font-bold mb-6">Student Dashboard</h1>
+          
+          <div class="bg-white p-5 rounded-xl border border-slate-200">
+            <h2 class="text-lg font-medium mb-4">Student Profile</h2>
+            <form id="student-profile-form" class="space-y-4 max-w-md">
+              <div>
+                <label class="block text-sm font-medium text-slate-500 mb-1">Full Name</label>
+                <input type="text" id="student-name" required class="w-full border border-slate-200 rounded-md p-2 text-sm outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-500 mb-1">Department</label>
+                <input type="text" id="student-department" required class="w-full border border-slate-200 rounded-md p-2 text-sm outline-none focus:border-blue-500">
+              </div>
+              <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 cursor-pointer">Save Profile</button>
+              <div id="profile-msg" class="text-sm mt-2"></div>
+            </form>
+          </div>
+
+          <div class="bg-white p-5 rounded-xl border border-slate-200">
+            <h2 class="text-lg font-medium mb-4">Upload Assignment</h2>
+            <form id="upload-form" class="space-y-4 max-w-md">
+              <div>
+                <label class="block text-sm font-medium text-slate-500 mb-1">Assignment Title</label>
+                <input type="text" id="assignment-title" required class="w-full border border-slate-200 rounded-md p-2 text-sm outline-none focus:border-blue-500">
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-slate-500 mb-1">File</label>
+                <input type="file" id="assignment-file" required class="w-full border border-slate-200 rounded-md p-2 text-sm outline-none focus:border-blue-500">
+              </div>
+              <button type="submit" id="upload-btn" class="bg-green-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-green-600 cursor-pointer">Upload</button>
+              <div id="upload-msg" class="text-sm mt-2"></div>
+            </form>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div class="p-5 border-b border-slate-200">
+              <h2 class="text-lg font-medium">My Assignments</h2>
+            </div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Title</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Submitted At</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">File</th>
+                </tr>
+              </thead>
+              <tbody id="my-assignments-list">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Admin Dashboard -->
+        <div id="admin-dashboard" class="hidden space-y-8">
+          <h1 class="text-2xl font-bold mb-6">Admin Dashboard</h1>
+
+          <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div class="p-5 border-b border-slate-200 flex justify-between items-center">
+              <h2 class="text-lg font-medium">All Students</h2>
+              <input type="text" id="search-students" placeholder="Search students..." class="w-64 px-3 py-2 border border-slate-200 rounded-md text-sm outline-none focus:border-blue-500">
+            </div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Name</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Email</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Department</th>
+                </tr>
+              </thead>
+              <tbody id="all-students-list">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <div class="bg-white rounded-xl border border-slate-200 overflow-hidden">
+            <div class="p-5 border-b border-slate-200">
+              <h2 class="text-lg font-medium">All Assignments</h2>
+            </div>
+            <table class="w-full text-left border-collapse">
+              <thead>
+                <tr>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Student</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Title</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Submitted At</th>
+                  <th class="bg-slate-50 p-4 text-xs font-semibold uppercase text-slate-500 border-b border-slate-200">Action</th>
+                </tr>
+              </thead>
+              <tbody id="all-assignments-list">
+                <!-- Populated by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script type="module" src="/js/dashboard.js"></script>
+    <script type="module" src="/js/upload.js"></script>
+  </body>
+</html>
